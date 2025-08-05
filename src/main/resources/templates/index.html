@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Tsinjo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fafafa;
+            display: flex;
+            justify-content: center;
+            padding: 30px;
+        }
+        .container {
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            padding: 30px;
+            background-color: #fff;
+            width: 400px;
+        }
+        input, button {
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 8px;
+        }
+        .history {
+            margin-top: 30px;
+        }
+        .history-entry {
+            margin-bottom: 15px;
+        }
+        .amount {
+            font-weight: bold;
+        }
+        .email {
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Tsinjo</h2>
+
+    <form method="post" th:action="@{/donation}">
+        <input type="email" name="email" placeholder="Email" required />
+        <input type="text" name="method" placeholder="Moyen de paiement" required />
+        <input type="text" name="reference" placeholder="Référence de paiement" required />
+        <button type="submit">Donner !</button>
+    </form>
+
+    <div class="history">
+        <h3>Historique</h3>
+
+        <ul>
+            <li th:each="donation : ${donations}">
+                <span class="amount">
+                    + <span th:text="${donation.payment.amount}">50000</span>Ar
+                </span>
+                (<span th:text="${donation.payment.status}">confirmé</span>,
+                <span th:text="${donation.payment.method}">Orange Money</span>).
+                <br />
+                <span th:text="${#temporals.format(donation.payment.date, 'dd/MM/yyyy')}">11/08/2025</span>.
+                Par <span th:text="${donation.donor.fullName}">Lou Andria</span>
+                (<span class="email" th:text="${donation.donor.email}">lou@hei.school</span>).
+            </li>
+
+            <li th:each="help : ${helps}">
+                - <span th:text="${help.payment.amount}">5000000</span>Ar.
+                Pour <span th:text="${help.beneficiary.fullName}">Koto Kely</span>
+                (<span class="email" th:text="${help.beneficiary.email}">koto@kely.mg</span>).
+                <br />
+                <span th:text="${help.description}">Koto a été renversé par une moto...</span>
+            </li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>
